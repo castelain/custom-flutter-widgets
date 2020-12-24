@@ -1,6 +1,6 @@
-import 'package:add_functions/pages/style/global.dart';
 import 'package:add_functions/provide/functionList_provide.dart';
 import 'package:add_functions/routers/application.dart';
+import 'package:add_functions/style/global.dart';
 import 'package:add_functions/widgets/function_entrance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

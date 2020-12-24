@@ -36,6 +36,7 @@ class _SelectFunctionPageState extends State<SelectFunctionPage> {
             ),
           ),
           onPressed: () {
+            Provide.value<FunctionListProvide>(context).initData();
             Application.router.navigateTo(context, '/list-function');
           },
         ),
@@ -49,6 +50,8 @@ class _SelectFunctionPageState extends State<SelectFunctionPage> {
           ElevatedButton(
             child: Text('完成'),
             onPressed: () {
+              Provide.value<FunctionListProvide>(context)
+                  .commitSelectedFunctions();
               Application.router.navigateTo(context, '/list-function');
             },
           ),

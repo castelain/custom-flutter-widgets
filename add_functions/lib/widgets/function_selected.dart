@@ -1,5 +1,5 @@
-import 'package:add_functions/pages/style/global.dart';
 import 'package:add_functions/provide/functionList_provide.dart';
+import 'package:add_functions/style/global.dart';
 import 'package:flutter/material.dart';
 import 'package:provide/provide.dart';
 

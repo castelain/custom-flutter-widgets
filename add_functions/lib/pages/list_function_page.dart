@@ -1,11 +1,11 @@
-import 'package:add_functions/pages/style/global.dart';
-import 'package:add_functions/provide/functionList_provide.dart';
+import 'package:add_functions/database/database_helper.dart';
+import 'package:add_functions/model/functionList_model.dart';
 import 'package:add_functions/routers/application.dart';
+import 'package:add_functions/style/global.dart';
 import 'package:add_functions/widgets/function_entrance.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provide/provide.dart';
 
 class ListFunctionPage extends StatefulWidget {
   @override
@@ -50,10 +50,62 @@ class _ListFunctionPageState extends State<ListFunctionPage> {
         },
       );
 
+  List<Widget> selectedFunctions = List();
+  List<Widget> selectedList = List();
+
+  Future<void> _getSelectedFunctionModelList() async {
+    var dbClient = DatabaseHelper();
+    List<FunctionModel> list = await dbClient.getSelectedFunctions();
+    selectedList = [];
+    list.forEach((item) {
+      selectedList.add(FunctionEntrance(
+        id: item.id,
+        iconName: item.iconName,
+        iconColor: item.iconColor,
+        title: item.title,
+        url: item.url,
+      ));
+    });
+    setState(() {
+      selectedFunctions = selectedList;
+    });
+  }
+
+  List<Widget> allFunctions = List();
+  List<Widget> allList = List();
+
+  Future<void> _getAlldFunctionModelList() async {
+    var dbClient = DatabaseHelper();
+    List<FunctionModel> list = await dbClient.getAllFunctions();
+    print('list: $list');
+    allList = [];
+    list.forEach((item) {
+      allList.add(FunctionEntrance(
+        id: item.id,
+        iconName: item.iconName,
+        iconColor: item.iconColor,
+        title: item.title,
+        url: item.url,
+      ));
+    });
+    setState(() {
+      allFunctions = allList;
+    });
+  }
+
   @override
-  Widget build(BuildContext context) {
+  build(BuildContext context) {
+    _getSelectedFunctionModelList()
+        .then((res) => {print('selectedList: $selectedList')});
+
+    _getAlldFunctionModelList().then((res) => {print('allList: $allList')});
+
     return Scaffold(
       appBar: AppBar(
+        leading: new IconButton(
+          icon: new Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Application.router.navigateTo(context, '/'),
+        ),
         title: Text('全部功能'),
       ),
       body: Container(
@@ -62,48 +114,22 @@ class _ListFunctionPageState extends State<ListFunctionPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Title,
-            Provide<FunctionListProvide>(
-              builder: (context, child, scope) {
-                List<Widget> selectedFunctions = List();
-                scope.selectedFunctionList.forEach((item) {
-                  selectedFunctions.add(FunctionEntrance(
-                    id: item.id,
-                    iconName: item.iconName,
-                    iconColor: item.iconColor,
-                    title: item.title,
-                    url: item.url,
-                  ));
-                });
-                return Expanded(
-                  child: GridView.count(
-                    crossAxisCount: 5,
-                    physics: NeverScrollableScrollPhysics(),
-                    children: selectedFunctions,
-                  ),
-                );
-              },
+            Expanded(
+              child: GridView.count(
+                crossAxisCount: 5,
+                physics: NeverScrollableScrollPhysics(),
+                children: selectedFunctions,
+              ),
             ),
             buildAddButton(context),
             Text('全部功能'),
-            Provide<FunctionListProvide>(builder: (context, child, scope) {
-              List<Widget> unSelectedFunctions = List();
-              scope.unSelectFunctionList.forEach((item) {
-                unSelectedFunctions.add(FunctionEntrance(
-                  id: item.id,
-                  iconName: item.iconName,
-                  iconColor: item.iconColor,
-                  title: item.title,
-                  url: item.url,
-                ));
-              });
-              return Expanded(
-                child: GridView.count(
-                  crossAxisCount: 5,
-                  physics: NeverScrollableScrollPhysics(),
-                  children: unSelectedFunctions,
-                ),
-              );
-            }),
+            Expanded(
+              child: GridView.count(
+                crossAxisCount: 5,
+                physics: NeverScrollableScrollPhysics(),
+                children: allFunctions,
+              ),
+            ),
           ],
         ),
       ),

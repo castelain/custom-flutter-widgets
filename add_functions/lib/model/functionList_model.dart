@@ -28,7 +28,7 @@ class FunctionModel {
   String iconColor;
   String title;
   String url;
-  bool isSelected;
+  int isSelected;
 
   FunctionModel(
       {this.id,

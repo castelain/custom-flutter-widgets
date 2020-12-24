@@ -10,6 +10,7 @@ class Routes {
   static void configureRoutes(FluroRouter router) {
     router.notFoundHandler = notFoundPageHandler;
 
+    router.define(root, handler: homePageHandler);
     router.define(selectFunctionPage, handler: selectFunctionPageHandler);
     router.define(listFunctionPage, handler: listFunctionPageHandler);
     router.define(warehouseQueryPage, handler: warehouseQueryPageHandler);
