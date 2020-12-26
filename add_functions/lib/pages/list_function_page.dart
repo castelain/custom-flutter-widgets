@@ -1,11 +1,13 @@
 import 'package:add_functions/database/database_helper.dart';
 import 'package:add_functions/model/functionList_model.dart';
+import 'package:add_functions/provide/functionList_provide.dart';
 import 'package:add_functions/routers/application.dart';
 import 'package:add_functions/style/global.dart';
 import 'package:add_functions/widgets/function_entrance.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provide/provide.dart';
 
 class ListFunctionPage extends StatefulWidget {
   @override
@@ -13,6 +15,13 @@ class ListFunctionPage extends StatefulWidget {
 }
 
 class _ListFunctionPageState extends State<ListFunctionPage> {
+  List<FunctionModel> allFunctionModels = List();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   // ignore: non_constant_identifier_names
   Widget Title = Center(
     child: Column(
@@ -46,17 +55,16 @@ class _ListFunctionPageState extends State<ListFunctionPage> {
           ),
         ),
         onTap: () {
+          Provide.value<FunctionListProvide>(context)
+              .filterFunctions(allFunctionModels);
           Application.router.navigateTo(context, '/select-function');
         },
       );
 
-  List<Widget> selectedFunctions = List();
-  List<Widget> selectedList = List();
-
-  Future<void> _getSelectedFunctionModelList() async {
+  Future<List<FunctionEntrance>> _getSelectedFunctionModelList() async {
     var dbClient = DatabaseHelper();
     List<FunctionModel> list = await dbClient.getSelectedFunctions();
-    selectedList = [];
+    List<FunctionEntrance> selectedList = [];
     list.forEach((item) {
       selectedList.add(FunctionEntrance(
         id: item.id,
@@ -66,19 +74,15 @@ class _ListFunctionPageState extends State<ListFunctionPage> {
         url: item.url,
       ));
     });
-    setState(() {
-      selectedFunctions = selectedList;
-    });
+    return selectedList;
   }
 
-  List<Widget> allFunctions = List();
-  List<Widget> allList = List();
-
-  Future<void> _getAlldFunctionModelList() async {
+  Future<List<FunctionEntrance>> _getAlldFunctionModelList() async {
     var dbClient = DatabaseHelper();
     List<FunctionModel> list = await dbClient.getAllFunctions();
+    allFunctionModels = list;
     print('list: $list');
-    allList = [];
+    List<FunctionEntrance> allList = [];
     list.forEach((item) {
       allList.add(FunctionEntrance(
         id: item.id,
@@ -88,18 +92,11 @@ class _ListFunctionPageState extends State<ListFunctionPage> {
         url: item.url,
       ));
     });
-    setState(() {
-      allFunctions = allList;
-    });
+    return allList;
   }
 
   @override
   build(BuildContext context) {
-    _getSelectedFunctionModelList()
-        .then((res) => {print('selectedList: $selectedList')});
-
-    _getAlldFunctionModelList().then((res) => {print('allList: $allList')});
-
     return Scaffold(
       appBar: AppBar(
         leading: new IconButton(
@@ -114,22 +111,38 @@ class _ListFunctionPageState extends State<ListFunctionPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Title,
-            Expanded(
-              child: GridView.count(
-                crossAxisCount: 5,
-                physics: NeverScrollableScrollPhysics(),
-                children: selectedFunctions,
-              ),
-            ),
+            FutureBuilder(
+                future: _getSelectedFunctionModelList(),
+                builder: (context, scope) {
+                  List<FunctionEntrance> selectedFunctions = List();
+                  if (scope.hasData) {
+                    selectedFunctions = scope.data;
+                  }
+                  return Expanded(
+                    child: GridView.count(
+                      crossAxisCount: 5,
+                      physics: NeverScrollableScrollPhysics(),
+                      children: selectedFunctions,
+                    ),
+                  );
+                }),
             buildAddButton(context),
             Text('全部功能'),
-            Expanded(
-              child: GridView.count(
-                crossAxisCount: 5,
-                physics: NeverScrollableScrollPhysics(),
-                children: allFunctions,
-              ),
-            ),
+            FutureBuilder(
+                future: _getAlldFunctionModelList(),
+                builder: (context, scope) {
+                  List<FunctionEntrance> allFunctions = List();
+                  if (scope.hasData) {
+                    allFunctions = scope.data;
+                  }
+                  return Expanded(
+                    child: GridView.count(
+                      crossAxisCount: 5,
+                      physics: NeverScrollableScrollPhysics(),
+                      children: allFunctions,
+                    ),
+                  );
+                }),
           ],
         ),
       ),

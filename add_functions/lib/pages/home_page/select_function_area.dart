@@ -1,10 +1,10 @@
-import 'package:add_functions/provide/functionList_provide.dart';
+import 'package:add_functions/database/database_helper.dart';
+import 'package:add_functions/model/functionList_model.dart';
 import 'package:add_functions/routers/application.dart';
 import 'package:add_functions/style/global.dart';
 import 'package:add_functions/widgets/function_entrance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provide/provide.dart';
 
 class SelectFunctionArea extends StatefulWidget {
   @override
@@ -12,12 +12,26 @@ class SelectFunctionArea extends StatefulWidget {
 }
 
 class _SelectFunctionAreaState extends State<SelectFunctionArea> {
-  List<Widget> list = List();
-
   @override
   void initState() {
     super.initState();
-    list.add(buildAddButton());
+  }
+
+  Future<List<Widget>> _getSelectedFunctionModelList() async {
+    List<FunctionEntrance> selectedList = List();
+    var dbClient = DatabaseHelper();
+    List<FunctionModel> list = await dbClient.getSelectedFunctions();
+    selectedList = [];
+    list.forEach((item) {
+      selectedList.add(FunctionEntrance(
+        id: item.id,
+        iconName: item.iconName,
+        iconColor: item.iconColor,
+        title: item.title,
+        url: item.url,
+      ));
+    });
+    return selectedList;
   }
 
   @override
@@ -28,22 +42,21 @@ class _SelectFunctionAreaState extends State<SelectFunctionArea> {
       width: ScreenUtil().setWidth(750),
       height: double.infinity,
       child: Center(
-        child: Provide<FunctionListProvide>(
-          builder: (buildContext, child, scope) {
-            List<Widget> newList = List();
-            scope.selectedFunctionList.forEach((item) => {
-                  newList.add(FunctionEntrance(
-                    iconName: item.iconName,
-                    iconColor: item.iconColor,
-                    title: item.title,
-                    url: item.url,
-                  ))
-                });
-            list.removeRange(0, list.length - 1);
-            list.insertAll(list.length - 1, newList);
-            return Wrap(
-              spacing: 10.0,
-              children: list,
+        child: FutureBuilder(
+          future: _getSelectedFunctionModelList(),
+          builder: (context, snapshot) {
+            List<Widget> selectedFunctions = [];
+            if (snapshot.hasData) {
+              selectedFunctions = snapshot.data;
+            }
+            return Column(
+              children: [
+                Wrap(
+                  spacing: 10.0,
+                  children: selectedFunctions,
+                ),
+                buildAddButton()
+              ],
             );
           },
         ),

@@ -3,9 +3,7 @@ import 'dart:math';
 import 'package:add_functions/database/database_helper.dart';
 import 'package:add_functions/model/functionList_model.dart';
 import 'package:add_functions/pages/home_page/select_function_area.dart';
-import 'package:add_functions/provide/functionList_provide.dart';
 import 'package:flutter/material.dart';
-import 'package:provide/provide.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -24,20 +22,25 @@ class _HomePageState extends State<HomePage> {
           url: '/warehouse-query',
           isSelected: 0));
 
+  @override
+  void initState() {
+    super.initState();
+    _storeData();
+  }
+
   void _storeData() async {
     var dbClient = DatabaseHelper();
-    // 先清空数据库中已保存的数据
-    await dbClient.removeAllFunctionModels().then((value) => {
-          functionList.forEach((item) async {
-            await dbClient.addFunctionModel(item);
-          })
-        });
+    List<FunctionModel> list = await dbClient.getAllFunctions();
+    if (list.length == 0) {
+      functionList.forEach((item) async {
+        await dbClient.addFunctionModel(item);
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    _storeData();
-    Provide.value<FunctionListProvide>(context).filterFunctions(functionList);
+    // Provide.value<FunctionListProvide>(context).filterFunctions(functionList);
 
     return Scaffold(
       appBar: AppBar(

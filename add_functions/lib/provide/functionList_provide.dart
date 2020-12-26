@@ -9,8 +9,7 @@ class FunctionListProvide with ChangeNotifier {
 
   void initData() async {
     var dbClient = DatabaseHelper();
-    List<FunctionModel> result = await dbClient.getAllFunctions();
-    functionList = result;
+    List<FunctionModel> functionList = await dbClient.getAllFunctions();
     filterFunctions(functionList);
     notifyListeners();
   }
@@ -67,6 +66,7 @@ class FunctionListProvide with ChangeNotifier {
     selectedFunctionList.forEach((item) async {
       await dbClient.updateFunctionModel(item.id, 1);
     });
-    initData();
+    notifyListeners();
+    // initData();
   }
 }
