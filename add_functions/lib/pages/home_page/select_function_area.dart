@@ -1,10 +1,8 @@
 import 'package:add_functions/database/database_helper.dart';
 import 'package:add_functions/model/functionList_model.dart';
-import 'package:add_functions/routers/application.dart';
-import 'package:add_functions/style/global.dart';
 import 'package:add_functions/widgets/function_entrance.dart';
+import 'package:add_functions/widgets/function_list.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SelectFunctionArea extends StatefulWidget {
   @override
@@ -37,60 +35,28 @@ class _SelectFunctionAreaState extends State<SelectFunctionArea> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10.0),
-      color: Colors.grey[100],
-      width: ScreenUtil().setWidth(750),
-      height: double.infinity,
-      child: Center(
-        child: FutureBuilder(
-          future: _getSelectedFunctionModelList(),
-          builder: (context, snapshot) {
-            List<Widget> selectedFunctions = [];
-            if (snapshot.hasData) {
-              selectedFunctions = snapshot.data;
-            }
-            return Column(
-              children: [
-                Wrap(
-                  spacing: 10.0,
-                  children: selectedFunctions,
-                ),
-                buildAddButton()
-              ],
-            );
-          },
-        ),
+      child: FutureBuilder(
+        future: _getSelectedFunctionModelList(),
+        builder: (context, snapshot) {
+          List<Widget> selectedFunctions = [];
+          if (snapshot.hasData) {
+            selectedFunctions = snapshot.data;
+            selectedFunctions.add(buildAddButton());
+          }
+          return FunctionList(
+            list: selectedFunctions,
+          );
+        },
       ),
     );
   }
 
   Widget buildAddButton() {
-    return Builder(builder: (context) {
-      return GestureDetector(
-        child: Container(
-          width: FunctionSelectionStyle.boxWidth,
-          height: FunctionSelectionStyle.boxHeight,
-          padding: FunctionSelectionStyle.boxPadding,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Icon(
-                  Icons.workspaces_filled,
-                  color: Colors.grey,
-                ),
-              ),
-              Text(
-                '全部',
-                style: FunctionSelectionStyle.titleStyle,
-              ),
-            ],
-          ),
-        ),
-        onTap: () {
-          Application.router.navigateTo(context, '/list-function');
-        },
-      );
-    });
+    return FunctionEntrance(
+      iconName: 'images/all.png',
+      iconColor: 'grey',
+      title: '全部',
+      url: '/list-function',
+    );
   }
 }

@@ -2,6 +2,7 @@ import 'package:add_functions/routers/application.dart';
 import 'package:add_functions/style/global.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class FunctionEntrance extends StatelessWidget {
   int id;
   String iconName;
@@ -24,13 +25,10 @@ class FunctionEntrance extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
-                child: Icon(
-              Icons.account_balance,
-              color: Colors.deepPurple,
-            )),
+                child: ImageIcon(AssetImage(iconName), color: Colors.blue)),
             Text(
               title,
-              style: FunctionSelectionStyle.titleStyle,
+              style: FunctionSelectionStyle.iconTitleStyle,
             ),
           ],
         ),

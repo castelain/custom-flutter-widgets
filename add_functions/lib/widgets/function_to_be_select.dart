@@ -26,13 +26,10 @@ class FunctionToBeSelect extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
-                  child: Icon(
-                Icons.account_balance,
-                color: Colors.deepPurple,
-              )),
+                  child: ImageIcon(AssetImage(iconName), color: Colors.blue)),
               Text(
                 title,
-                style: FunctionSelectionStyle.titleStyle,
+                style: FunctionSelectionStyle.iconTitleStyle,
               ),
             ],
           ),

@@ -1,6 +1,9 @@
 import 'package:add_functions/provide/functionList_provide.dart';
 import 'package:add_functions/routers/application.dart';
+import 'package:add_functions/style/global.dart';
+import 'package:add_functions/widgets/function_list.dart';
 import 'package:add_functions/widgets/function_selected.dart';
+import 'package:add_functions/widgets/function_title.dart';
 import 'package:add_functions/widgets/function_to_be_select.dart';
 import 'package:flutter/material.dart';
 import 'package:provide/provide.dart';
@@ -12,15 +15,20 @@ class SelectFunctionPage extends StatefulWidget {
 
 class _SelectFunctionPageState extends State<SelectFunctionPage> {
   // ignore: non_constant_identifier_names
-  Widget Title = Center(
+  Widget Title = Container(
+    color: FunctionSelectionStyle.contentBgColor,
+    padding: FunctionSelectionStyle.titleMargin,
+    child: Center(
       child: Column(
-    children: [
-      Text(
-        '你可以将常用的功能添加到系统首页，',
+        children: [
+          Text(
+            '你可以将常用的功能添加到系统首页，',
+          ),
+          Text('下面是首页已添加的功能')
+        ],
       ),
-      Text('下面是首页已添加的功能')
-    ],
-  ));
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +66,6 @@ class _SelectFunctionPageState extends State<SelectFunctionPage> {
         ],
       ),
       body: Container(
-        margin: EdgeInsets.fromLTRB(10, 20, 10, 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -74,15 +81,14 @@ class _SelectFunctionPageState extends State<SelectFunctionPage> {
                   url: item.url,
                 ));
               });
-              return Expanded(
-                child: GridView.count(
-                  crossAxisCount: 5,
-                  physics: NeverScrollableScrollPhysics(),
-                  children: selectedFunctions,
-                ),
+              return FunctionList(
+                list: selectedFunctions,
               );
             }),
-            Text('其它功能'),
+            Container(
+              margin: FunctionSelectionStyle.titleMargin,
+              child: FunctionTitle(text: '其它功能'),
+            ),
             Provide<FunctionListProvide>(builder: (context, child, scope) {
               List<Widget> unSelectedFunctions = List();
               scope.unSelectFunctionList.forEach((item) {
@@ -94,17 +100,16 @@ class _SelectFunctionPageState extends State<SelectFunctionPage> {
                   url: item.url,
                 ));
               });
-              return Expanded(
-                child: GridView.count(
-                  crossAxisCount: 5,
-                  physics: NeverScrollableScrollPhysics(),
-                  children: unSelectedFunctions,
+              return Container(
+                child: FunctionList(
+                  list: unSelectedFunctions,
                 ),
               );
             }),
           ],
         ),
       ),
+      backgroundColor: FunctionSelectionStyle.backgroundColor,
     );
   }
 }

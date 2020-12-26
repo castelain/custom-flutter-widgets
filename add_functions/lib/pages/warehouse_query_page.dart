@@ -1,3 +1,4 @@
+import 'package:add_functions/style/global.dart';
 import 'package:flutter/material.dart';
 
 class WarehouseQuery extends StatelessWidget {
@@ -10,6 +11,7 @@ class WarehouseQuery extends StatelessWidget {
       body: Center(
         child: Text('查询仓库...'),
       ),
+      backgroundColor: FunctionSelectionStyle.backgroundColor,
     );
   }
 }

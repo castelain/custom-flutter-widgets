@@ -1,5 +1,6 @@
 import 'package:add_functions/pages/home_page.dart';
 import 'package:add_functions/provide/functionList_provide.dart';
+import 'package:add_functions/style/global.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,6 +31,9 @@ class MyApp extends StatelessWidget {
         allowFontScaling: false,
         child: MaterialApp(
           title: 'Add Functions',
+          theme: ThemeData(
+            backgroundColor: FunctionSelectionStyle.backgroundColor,
+          ),
           debugShowCheckedModeBanner: false,
           onGenerateRoute: Application.router.generator,
           home: HomePage(),

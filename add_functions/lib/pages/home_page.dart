@@ -2,8 +2,10 @@ import 'dart:math';
 
 import 'package:add_functions/database/database_helper.dart';
 import 'package:add_functions/model/functionList_model.dart';
-import 'package:add_functions/pages/home_page/select_function_area.dart';
+import 'package:add_functions/style/global.dart';
 import 'package:flutter/material.dart';
+
+import 'home_page/select_function_area.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,9 +18,9 @@ class _HomePageState extends State<HomePage> {
       11,
       (index) => FunctionModel(
           id: Random().nextInt(1000),
-          iconName: 'account_balance',
+          iconName: 'images/warehouse-query.png',
           iconColor: 'deepPurple',
-          title: '仓库查询',
+          title: '仓库查询$index',
           url: '/warehouse-query',
           isSelected: 0));
 
@@ -36,12 +38,15 @@ class _HomePageState extends State<HomePage> {
         await dbClient.addFunctionModel(item);
       });
     }
+    // dbClient.removeAllFunctionModels().then((res) => {
+    //       functionList.forEach((item) async {
+    //         await dbClient.addFunctionModel(item);
+    //       })
+    //     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // Provide.value<FunctionListProvide>(context).filterFunctions(functionList);
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -50,6 +55,7 @@ class _HomePageState extends State<HomePage> {
       body: Container(
         child: SelectFunctionArea(),
       ),
+      backgroundColor: FunctionSelectionStyle.backgroundColor,
     );
   }
 }
