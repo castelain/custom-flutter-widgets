@@ -6,6 +6,8 @@ class FunctionListProvide with ChangeNotifier {
   List<FunctionModel> functionList = List();
   List<FunctionModel> selectedFunctionList = List();
   List<FunctionModel> unSelectFunctionList = List();
+  // 标识数据是否为脏的，是否操作过
+  bool isDirty = false;
 
   void initData() async {
     var dbClient = DatabaseHelper();
@@ -37,6 +39,7 @@ class FunctionListProvide with ChangeNotifier {
   }
 
   void addFunction(int id) {
+    isDirty = true;
     for (var i = 0; i < unSelectFunctionList.length; i++) {
       if (unSelectFunctionList[i].id == id) {
         unSelectFunctionList[i].isSelected = 1;
@@ -48,6 +51,7 @@ class FunctionListProvide with ChangeNotifier {
   }
 
   void removeFunction(int id) {
+    isDirty = true;
     for (var i = 0; i < selectedFunctionList.length; i++) {
       if (selectedFunctionList[i].id == id) {
         selectedFunctionList[i].isSelected = 0;
@@ -66,6 +70,7 @@ class FunctionListProvide with ChangeNotifier {
     selectedFunctionList.forEach((item) async {
       await dbClient.updateFunctionModel(item.id, 1);
     });
+    isDirty = false;
     notifyListeners();
     // initData();
   }

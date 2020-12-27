@@ -10,6 +10,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provide/provide.dart';
+import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 class ListFunctionPage extends StatefulWidget {
   @override
@@ -91,57 +92,62 @@ class _ListFunctionPageState extends State<ListFunctionPage> {
 
   @override
   build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: new IconButton(
-          icon: new Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Application.router.navigateTo(context, '/'),
+    return SimpleGestureDetector(
+      onHorizontalSwipe: (SwipeDirection direction) {
+        Application.router.navigateTo(context, '/');
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: new IconButton(
+            icon: new Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Application.router.navigateTo(context, '/'),
+          ),
+          title: Text('全部功能'),
         ),
-        title: Text('全部功能'),
-      ),
-      body: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              // margin: EdgeInsets.only(top: -10),
-              child: FunctionTitle(
-                text: '我的功能',
+        body: Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                // margin: EdgeInsets.only(top: -10),
+                child: FunctionTitle(
+                  text: '我的功能',
+                ),
               ),
-            ),
-            FutureBuilder(
-                future: _getSelectedFunctionModelList(),
-                builder: (context, scope) {
-                  List<FunctionEntrance> selectedFunctions = List();
-                  if (scope.hasData) {
-                    selectedFunctions = scope.data;
-                  }
-                  return FunctionList(
-                    list: selectedFunctions,
-                  );
-                }),
-            buildAddButton(context),
-            Container(
-              margin: FunctionSelectionStyle.titleMargin,
-              child: FunctionTitle(
-                text: '全部功能',
+              FutureBuilder(
+                  future: _getSelectedFunctionModelList(),
+                  builder: (context, scope) {
+                    List<FunctionEntrance> selectedFunctions = List();
+                    if (scope.hasData) {
+                      selectedFunctions = scope.data;
+                    }
+                    return FunctionList(
+                      list: selectedFunctions,
+                    );
+                  }),
+              buildAddButton(context),
+              Container(
+                margin: FunctionSelectionStyle.titleMargin,
+                child: FunctionTitle(
+                  text: '全部功能',
+                ),
               ),
-            ),
-            FutureBuilder(
-                future: _getAlldFunctionModelList(),
-                builder: (context, scope) {
-                  List<FunctionEntrance> allFunctions = List();
-                  if (scope.hasData) {
-                    allFunctions = scope.data;
-                  }
-                  return Container(
-                    child: FunctionList(list: allFunctions),
-                  );
-                }),
-          ],
+              FutureBuilder(
+                  future: _getAlldFunctionModelList(),
+                  builder: (context, scope) {
+                    List<FunctionEntrance> allFunctions = List();
+                    if (scope.hasData) {
+                      allFunctions = scope.data;
+                    }
+                    return Container(
+                      child: FunctionList(list: allFunctions),
+                    );
+                  }),
+            ],
+          ),
         ),
+        backgroundColor: FunctionSelectionStyle.backgroundColor,
       ),
-      backgroundColor: FunctionSelectionStyle.backgroundColor,
     );
   }
 }

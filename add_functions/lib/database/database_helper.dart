@@ -53,7 +53,7 @@ class DatabaseHelper {
 
   Future<List<FunctionModel>> getAllFunctions() async {
     Database dbClient = await db;
-    var result = await dbClient.query(tableName);
+    var result = await dbClient.query(tableName, orderBy: '$id');
     var list = result.toList();
     List<FunctionModel> functionModelList = List();
     list.forEach((item) {
@@ -64,8 +64,8 @@ class DatabaseHelper {
 
   Future<List<FunctionModel>> getSelectedFunctions() async {
     Database dbClient = await db;
-    var result = await dbClient
-        .query(tableName, where: '$isSelected = ?', whereArgs: [1]);
+    var result = await dbClient.query(tableName,
+        where: '$isSelected = ?', whereArgs: [1], orderBy: '$id');
     var list = result.toList();
     List<FunctionModel> functionModelList = List();
     list.forEach((item) {

@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
           title: 'Add Functions',
           theme: ThemeData(
             backgroundColor: FunctionSelectionStyle.backgroundColor,
+            // platform: TargetPlatform.iOS,
           ),
           debugShowCheckedModeBanner: false,
           onGenerateRoute: Application.router.generator,
