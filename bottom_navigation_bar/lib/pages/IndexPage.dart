@@ -10,7 +10,8 @@ class IndexPage extends StatefulWidget {
   _IndexPageState createState() => _IndexPageState();
 }
 
-class _IndexPageState extends State<IndexPage> {
+class _IndexPageState extends State<IndexPage>
+    with AutomaticKeepAliveClientMixin {
   final _bottomNavigationColor = Colors.blue;
   final _bottomNavigationItemColor = Colors.white;
   final _textStyle = TextStyle(
@@ -34,7 +35,10 @@ class _IndexPageState extends State<IndexPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pages[_currentIndex],
+      body: IndexedStack(
+        index: _currentIndex,
+        children: pages,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: _bottomNavigationColor,
@@ -100,4 +104,7 @@ class _IndexPageState extends State<IndexPage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
