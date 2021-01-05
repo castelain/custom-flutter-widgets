@@ -20,35 +20,35 @@ class FunctionToBeSelect extends StatelessWidget {
       width: FunctionSelectionStyle.boxWidth,
       height: FunctionSelectionStyle.boxHeight,
       padding: FunctionSelectionStyle.boxPadding,
-      child: Stack(
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                  child: ImageIcon(AssetImage(iconName), color: Colors.blue)),
-              Text(
-                title,
-                style: FunctionSelectionStyle.iconTitleStyle,
-              ),
-            ],
-          ),
-          Positioned(
-            top: 0,
-            right: 0,
-            child: InkWell(
+      child: InkWell(
+        child: Stack(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                    child: ImageIcon(AssetImage(iconName), color: Colors.blue)),
+                Text(
+                  title,
+                  style: FunctionSelectionStyle.iconTitleStyle,
+                ),
+              ],
+            ),
+            Positioned(
+              top: 0,
+              right: 0,
               child: Icon(
                 Icons.add_circle,
                 size: FunctionSelectionStyle.operationIconSize,
                 color: FunctionSelectionStyle.operationAddIconColor,
               ),
-              onTap: () {
-                print('添加功能，id为：$id');
-                Provide.value<FunctionListProvide>(context).addFunction(id);
-              },
-            ),
-          )
-        ],
+            )
+          ],
+        ),
+        onTap: () {
+          print('添加功能，id为：$id');
+          Provide.value<FunctionListProvide>(context).addFunction(id);
+        },
       ),
     );
   }

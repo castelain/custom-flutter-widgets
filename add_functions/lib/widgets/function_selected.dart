@@ -20,35 +20,35 @@ class FunctionSelected extends StatelessWidget {
       width: FunctionSelectionStyle.boxWidth,
       height: FunctionSelectionStyle.boxHeight,
       padding: FunctionSelectionStyle.boxPadding,
-      child: Stack(
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                  child: ImageIcon(AssetImage(iconName), color: Colors.blue)),
-              Text(
-                title,
-                style: FunctionSelectionStyle.iconTitleStyle,
-              ),
-            ],
-          ),
-          Positioned(
-            top: 0,
-            right: 0,
-            child: InkWell(
+      child: InkWell(
+        child: Stack(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                    child: ImageIcon(AssetImage(iconName), color: Colors.blue)),
+                Text(
+                  title,
+                  style: FunctionSelectionStyle.iconTitleStyle,
+                ),
+              ],
+            ),
+            Positioned(
+              top: 0,
+              right: 0,
               child: Icon(
                 Icons.cancel,
                 size: FunctionSelectionStyle.operationIconSize,
                 color: FunctionSelectionStyle.operationRemoveIconColor,
               ),
-              onTap: () {
-                print('移除功能，id为：$id');
-                Provide.value<FunctionListProvide>(context).removeFunction(id);
-              },
-            ),
-          )
-        ],
+            )
+          ],
+        ),
+        onTap: () {
+          print('移除功能，id为：$id');
+          Provide.value<FunctionListProvide>(context).removeFunction(id);
+        },
       ),
     );
   }
